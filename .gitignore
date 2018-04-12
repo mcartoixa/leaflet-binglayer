@@ -1,0 +1,8 @@
+.sonarlint/
+.tmp/
+node_modules/
+tmp/
+
+.env
+package-lock.json
+*.log

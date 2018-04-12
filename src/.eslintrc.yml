@@ -1,0 +1,13 @@
+env:
+  browser: true
+globals:
+  define: true
+  encodeURIcomponent: true
+parserOptions:
+  ecmaVersion: 5
+rules:
+  array-element-newline: error
+  camelcase: error
+  no-empty-function: error
+  no-implicit-globals: error
+

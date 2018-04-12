@@ -1,0 +1,24 @@
+{
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.trimAutoWhitespace": true,
+    "files.exclude": {
+        "**/.git": true,
+        "**/*.log": true,
+        "**/node_modules/": true,
+        ".sonar/": true,
+        ".sonarlint/": true,
+        ".tmp/": true,
+        "tmp/": true
+    },
+    "javascript.format.enable": true,
+    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
+    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+    "javascript.format.insertSpaceAfterSemicolonInForStatements": true,
+    "javascript.format.insertSpaceBeforeFunctionParenthesis": false,
+    "terminal.integrated.shellArgs.windows": [
+        "/K",
+        "bin\\SetEnv.bat"
+    ]
+}

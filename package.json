@@ -1,0 +1,34 @@
+{
+  "name": "leaflet-binglayer",
+  "version": "0.0.1",
+  "description": "Bing Maps Layer for Leaflet",
+  "license": "MIT",
+  "repository": "github:mcartoixa/leaflet-binglayer",
+  "main": "src/index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "browser-env-vars": "~1.1.1",
+    "budo": "~11.2.0",
+    "eslint": "~4.19.1",
+    "gulp": "~3.9.1",
+    "gulp-eslint": "~4.0.2",
+    "webpack-stream": "~4.0.3"
+  },
+  "peerDependencies": {
+    "leaflet": ">=1.0.0"
+  },
+  "directories": {
+    "lib": "./src"
+  },
+  "scripts": {
+    "debug": "gulp debug",
+    "clean": "gulp clean",
+    "compile": "gulp compile",
+    "test": "gulp test",
+    "analysis": "gulp analysis",
+    "package": "gulp package",
+    "build": "gulp compile test",
+    "rebuild": "gulp clean compile test",
+    "release": "gulp clean compile test package"
+  }
+}

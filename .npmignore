@@ -1,0 +1,7 @@
+.vscode/
+bin/
+test/
+
+*.yml
+*.bat
+gulpfile.js
