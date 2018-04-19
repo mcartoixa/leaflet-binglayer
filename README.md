@@ -1,6 +1,8 @@
 # leaflet-binglayer
 Yet another Leaflet plugin that handles Bing Maps layers.
 
+[![Build status](https://travis-ci.org/mcartoixa/leaflet-binglayer.svg?branch=master)](https://travis-ci.org/mcartoixa/leaflet-binglayer)
+
 This plugin is loosely based on [leaflet-bing-layer](https://github.com/digidem/leaflet-bing-layer/blob/gh-pages/leaflet-bing-layer.js) and
 [leaflet-plugins](https://github.com/shramov/leaflet-plugins/blob/master/layer/tile/Bing.js). Check them out, you might find there is better
 support there ;-)
@@ -8,8 +10,8 @@ support there ;-)
 The main difference here is that :
 * this plugin has no dependency (outside of [leaflet](http://leafletjs.com/) v1+ of course).
 * it caches Bing metadata in memory, which should result in fewer [Bing Maps transactions](https://msdn.microsoft.com/en-us/library/ff859477.aspx) when:
-  * you have more than 1 map in the same page.
-  * your maps are part of a SPA application.
+  * you need more than 1 map in the same page.
+  * your maps are part of a Single Page Application.
 
 ## Usage
 

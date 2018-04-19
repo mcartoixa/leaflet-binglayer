@@ -1,0 +1,31 @@
+language: node_js
+node_js:
+- '8'
+
+cache:
+  directories:
+  - node_modules
+
+  install:
+- npm install --no-package-lock --no-shrinkwrap
+
+before_script:
+- npm --no-git-tag-version 1.0.0-$TRAVIS_BUILD_NUMBER
+script:
+- npm run-script release
+
+deploy:
+  - provider: npm
+  api_key:
+    secure: Hi6/7vLpVx5bteS6+OiUQF8WARj8KwhCEL4FZ/LQkrmAzAkcf7QnysAu/dDyzeJsDmNa9wdTFAOabxtcwwNYPiJwJauWVgSVZ3oj4nyMx8piBQg225a5NjXWC2JpLjpTQlRW+0v/Ca+eTaKPWvQfJzdzibK8XWl+nSojuEAUn7qso4gG4ew5MidkNFau7dsIhgYazuFSb7k8VilOCMt2adj9UPwC6/9S+C15/oAVST5wEmIiainl67yNP/LRo387HIejnqAhyt1IqEHGsSNEzPjtUuscE4BeWM2Rj5TufCzh9aJe7C/zHv3uAPHi6F5Bxtf+ILWfW7oE677AGcTURV98O0X7GwkVY3JxThm0g31p/kCKKOZMNE0i9+A0AOq40ZrCFu5HjpFfonzEF5KGyk46M1TTKJLdppSsFgjkHhPTO7L7BhO6yLFbi4QbAyVy1UGeDuKfD1iTKdV41NV1wLdsbfPs4joJlDssChuoI12JVgKA+uMJrbHKXY0Hn8ooBaDSUxzP9CJNlosANRqW9h8PK1ve9E9w/d8h+L3hk1aEZaVr0iedyu9YGuvpnQDJXWdoBJ2yxFg9rlyl34C1wiDZ23LsKCmQgGUSus0kT2hoMx64aF/pRn40xf5aWVxGL70H24XQhpwPx9oYRfrNkg+e12LhhM6jHGScTul/M+Q=
+  skip_cleanup: true
+  on:
+    tags: true
+  - provider: releases
+  api_key:
+    secure: XQFlToAXpwJpSg70gQME4LrP32kduDFpsoXazrf66o0WzZSql2DtsqQwYqmow46v0E/LYymEsxFNL8caHm+wt/CSNDkqBt+9Z235Hrg679/8GahI/Sg210vrThW3yQ/c9GIaZA9cGxXmNpZziQTK3/DP+nz4xFPeKIIVvUfrcQR0prfEd/GFLHc63aqG1pi4Futy0YhsggF8g8YopwKawSFHH5hw4b1RTZuwLBsBm+YOQyubD8hdQDrPQe4ai385bTIpWoNgtkaJKBLtSkYBgJmPJQ2vqmrTIzD+jXsplcGSmicoISaI1t3hOXjbd93NHhR6/lmYDT2W1bZ1yYRnP6kqo/plAi326lDxIpPg4L+mgtBnLI1ejYODRSb9jfM5C4NHaZf1sHP8NwDABFrgo1RJoEPrbzcTye81HQ64EB9Kp8nSxscYATsD0g+S/fFmqursh+o6MhwvAPM3YMvKlvrd4+RN3vbl8B8FPw9zcN2uhdaCXwdhkBvPqBVlQVmYi7PLyctUjWtWzda6R3fC+iBiM0NmvkSvbngufprwgv6Jhp9Rdybfo8Q6+J+1ROxp5eVAoJhtP90zNdbzo/JThQuJRxOaKio7b3s10l+WdCvxbHxcihu6TDHhwJyBt0zx7Dh1YPBCqaRfG8T8BEwX+gnPwioCryKNQ3GMUgBOX8U=
+  file_glob: true
+  file: tmp/out/bin/*
+  skip_cleanup: true
+  on:
+    tags: true

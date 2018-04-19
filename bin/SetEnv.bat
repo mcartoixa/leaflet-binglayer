@@ -12,7 +12,27 @@ IF ERRORLEVEL 1 GOTO ERROR_NODEJS
 ECHO SET NodeJsHomePath=%NodeJsHomePath%
 
 SET PATH=%CD%\bin;%CD%\node_modules\.bin;%NodeJsHomePath%;%APPDATA%\npm;%GitHomePath%\bin;%PATH%
+
+CALL :SetRubyPathHelper > nul 2>&1
+IF ERRORLEVEL 1 (
+    ECHO [92mCould not find Ruby 2.4[0m
+) ELSE (
+    ECHO SET RUBYPATH=%RUBYPATH%
+    SET PATH=%RUBYPATH%bin;%PATH%
+)
 GOTO END
+
+
+
+:SetRubyPathHelper
+SET RUBYPATH=
+FOR /F "tokens=1,2*" %%i in ('REG QUERY HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall\RubyInstaller-2.4-x64-mingw32_is1 /V InstallLocation') DO (
+    IF "%%i"=="InstallLocation" (
+        SET "RUBYPATH=%%k"
+    )
+)
+IF "%RUBYPATH%"=="" EXIT /B 1
+EXIT /B 0
 
 
 

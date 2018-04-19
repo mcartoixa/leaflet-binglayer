@@ -9,9 +9,11 @@
   "devDependencies": {
     "browser-env-vars": "~1.1.1",
     "budo": "~11.2.0",
+    "del": "~3.0.0",
     "eslint": "~4.19.1",
     "gulp": "~3.9.1",
     "gulp-eslint": "~4.0.2",
+    "run-sequence": "~2.2.1",
     "webpack-stream": "~4.0.3"
   },
   "peerDependencies": {
@@ -24,11 +26,9 @@
     "debug": "gulp debug",
     "clean": "gulp clean",
     "compile": "gulp compile",
-    "test": "gulp test",
-    "analysis": "gulp analysis",
     "package": "gulp package",
-    "build": "gulp compile test",
-    "rebuild": "gulp clean compile test",
-    "release": "gulp clean compile test package"
+    "build": "gulp compile",
+    "rebuild": "gulp rebuild",
+    "release": "gulp release"
   }
 }
