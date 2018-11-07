@@ -1,93 +1,115 @@
-const browserEnvVars = require('browser-env-vars');
-const budo = require('budo');
-const del = require('del');
-const gulp = require('gulp');
-const eslint = require('gulp-eslint');
-const runSequence = require('run-sequence');
-const webpack = require('webpack-stream');
+const gulp = require('gulp')
+const path = require('path')
+const runSequence = require('run-sequence')
 
-const srcPath = 'src/';
-const testPath = 'test/';
-const tmpPath = 'tmp/';
-const objPath = tmpPath + 'obj/';
-const outPath = tmpPath + 'out/';
-const outBinPath = outPath + 'bin/';
+const plugins = require('gulp-load-plugins')({ lazy: true })
 
-const srcFiles = srcPath + '**/*.js';
+const srcPath = 'src/'
+const testPath = 'test/'
+const tmpPath = 'tmp/'
+const binPath = tmpPath + 'bin/'
+const objPath = tmpPath + 'obj/'
+const objBinPath = objPath + 'bin/'
+const outPath = tmpPath + 'out/'
+const outBinPath = outPath + 'bin/'
 
-gulp.task('clean', function() {
-    return del([ tmpPath ]);
-});
+const srcFiles = srcPath + '**/*.js'
 
-gulp.task('compile', function() {
-    return gulp.src([ '*.js', srcFiles ])
-        .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError());
-});
+const destPath = process.env.NODE_ENV === 'development' ? objBinPath : binPath
 
-gulp.task('debug', [ 'compile' ], function(done) {
-    gulp.watch(srcFiles, [ 'compile' ])
-        .add('**/.eslintrc.yml');
+// clean
+gulp.task('clean', function () {
+  const del = require('del')
 
-    // Create the destination directory for browser-env-vars
-    const objTestPath = objPath + testPath;
-    gulp.src('*.*', {
-        read: false
-    }).pipe(gulp.dest(objTestPath))
-        .on('end', function() {
-            browserEnvVars.generate({
-                outFile: objTestPath + 'env.js',
-                whitelist: [ 'BING_KEY' ],
-                esm: true
-            });
-            budo('src/index.js', {
-                dir: [
-                    testPath,
-                    objTestPath
-                ],
-                live: true,
-                stream: process.stdout,
-                port: 8000,
-                watchGlob: [
-                    srcFiles,
-                    'test/index.html'
-                ]
-            }).on('exit', done);
-        });
-});
+  return del([ tmpPath ])
+})
 
-gulp.task('package', [ 'compile' ], function() {
-    return gulp.src([ srcFiles ])
-        .pipe(webpack({
-            externals: 'leaflet',
-            output: {
-                filename: 'leaflet-binglayer.min.js'
-            },
-            plugins: [
-                new webpack.webpack.optimize.UglifyJsPlugin({
-                    uglifyOptions: {
-                        compress: {
-                            keep_fnames: true
-                        },
-                        mangle: {
-                            keep_fnames: true
-                        },
-                        output: {
-                            beautify: false
-                        },
-                        warnings: true
-                    }
-                })
-            ]
-        }))
-        .pipe(gulp.dest(outBinPath));
-});
+// compile
+gulp.task('compile', function () {
+  const pipeline = require('readable-stream').pipeline
+  return pipeline(
+    gulp.src(srcFiles),
+    plugins.rename('leaflet-binglayer.min.js'),
+    plugins.sourcemaps.init(),
+    plugins.uglify({
+      ie8: true
+    }),
+    plugins.sourcemaps.write('.'),
+    gulp.dest(destPath),
+    plugins.connect.reload()
+  )
+})
 
-gulp.task('rebuild', function(done) {
-    runSequence('clean', 'compile', done);
-});
-gulp.task('release', function(done) {
-    runSequence('clean', 'package', done);
-});
-gulp.task('default', [ 'compile' ]);
+// analysis
+gulp.task('analysis', [ 'analysis-eslint', 'analysis-cloc' ])
+gulp.task('analysis-eslint', function () {
+  return gulp.src(srcFiles)
+    .pipe(plugins.eslint())
+    .pipe(plugins.eslint.format())
+    .pipe(plugins.eslint.failAfterError())
+})
+gulp.task('analysis-cloc', function (done) {
+  const spawn = require('child_process').spawn
+  const clocExe = process.platform === 'win32' ? '"' + path.join(__dirname, '.tmp/cloc.exe') + '"' : 'perl'
+  const clocArgs = [
+    '--3',
+    '--quiet',
+    '--progress-rate=0',
+    '--xml',
+    '--out tmp/cloc-results.xml',
+    '--exclude-dir=.tmp,.vscode,build,node_modules,tmp',
+    '.'
+  ]
+  if (process.platform !== 'win32') {
+    clocArgs.unshift('"' + path.join(__dirname, '.tmp/cloc.pl') + '"')
+  }
+  const cloc = spawn(clocExe, clocArgs, {
+    stdio: 'inherit',
+    shell: true
+  })
+  cloc.on('exit', function (exitCode) {
+    done(exitCode !== 0 && process.env.NODE_ENV !== 'development' ? 'ERROR: CLOC process exited with code ' + exitCode : null)
+  })
+})
+
+// debug
+gulp.task('debug-env', function () {
+  const browserEnvVars = require('browser-env-vars')
+  browserEnvVars.generate({
+    outFile: objBinPath + 'env.js',
+    whitelist: [ 'BING_KEY' ],
+    esm: true
+  })
+})
+gulp.task('debug-watch', function () {
+  gulp.watch(srcFiles, [ 'compile' ])
+    .add('**/.eslintrc.yml')
+})
+gulp.task('debug', [ 'compile', 'debug-env', 'debug-watch' ], function (done) {
+  plugins.connect.server({
+    name: 'Leaflet BingLayer',
+    root: [testPath, objBinPath],
+    port: 8000,
+    livereload: true
+  })
+})
+
+// package
+gulp.task('package', [ 'compile' ], function () {
+  return gulp.src(destPath + '**/*.*')
+    .pipe(gulp.dest(outBinPath))
+})
+
+// build
+gulp.task('build', function (done) {
+  runSequence('analysis', 'compile', done)
+})
+// rebuild
+gulp.task('rebuild', function (done) {
+  runSequence('clean', 'build', done)
+})
+// release
+gulp.task('release', function (done) {
+  runSequence('rebuild', 'package', done)
+})
+gulp.task('default', [ 'debug' ])

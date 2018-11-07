@@ -1,26 +1,53 @@
 @ECHO OFF
 
+:: Reset ERRORLEVEL
+VERIFY OTHER 2>nul
+
+SET _CLOC_VERSION=1.80
+
+
+
 :: -------------------------------------------------------------------
 :: Set environment variables
 :: -------------------------------------------------------------------
-CALL :SetGitHomePathHelper > nul 2>&1
-IF ERRORLEVEL 1 GOTO ERROR_GIT
-ECHO SET GitHomePath=%GitHomePath%
+::CALL :SetRubyPathHelper > nul 2>&1
+::IF ERRORLEVEL 1 (
+::    ECHO [92mCould not find Ruby 2.4[0m
+::) ELSE (
+::    ECHO SET RUBYPATH=%RUBYPATH%
+::    CALL "%RUBYPATH%bin\setrbvars.cmd" > nul
+::)
 
 CALL :SetNodeJsHomePathHelper > nul 2>&1
 IF ERRORLEVEL 1 GOTO ERROR_NODEJS
 ECHO SET NodeJsHomePath=%NodeJsHomePath%
 
-SET PATH=%CD%\bin;%CD%\node_modules\.bin;%NodeJsHomePath%;%APPDATA%\npm;%GitHomePath%\bin;%PATH%
+CALL :SetGitHomePathHelper > nul 2>&1
+IF ERRORLEVEL 1 GOTO ERROR_GIT
+ECHO SET GitHomePath=%GitHomePath%
 
-CALL :SetRubyPathHelper > nul 2>&1
-IF ERRORLEVEL 1 (
-    ECHO [92mCould not find Ruby 2.4[0m
-) ELSE (
-    ECHO SET RUBYPATH=%RUBYPATH%
-    SET PATH=%RUBYPATH%bin;%PATH%
+IF NOT EXIST "%CD%\.tmp\cloc.exe" (
+    IF NOT EXIST .tmp MKDIR .tmp
+    powershell.exe -NoLogo -NonInteractive -ExecutionPolicy ByPass -Command "& { [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest https://github.com/AlDanial/cloc/releases/download/v$Env:_CLOC_VERSION/cloc-$Env:_CLOC_VERSION.exe -OutFile .tmp\cloc.exe; }"
+    IF ERRORLEVEL 1 GOTO ERROR_CLOC
 )
+
+CALL :SetLocalEnvHelper 2>nul
+
+SET PATH=%CD%\node_modules\.bin;%NodeJsHomePath%;%APPDATA%\npm;%GitHomePath%\bin;%PATH%
 GOTO END
+
+
+
+:SetLocalEnvHelper
+IF EXIST .env (
+    ECHO.
+    FOR /F "eol=# tokens=1* delims==" %%i IN (.env) DO (
+        SET "%%i=%%j"
+        ECHO SET %%i=%%j
+    )
+)
+EXIT /B 0
 
 
 

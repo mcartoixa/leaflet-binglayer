@@ -4,5 +4,12 @@ node_modules/
 tmp/
 
 .env
+npm-debug.log*
 package-lock.json
 *.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock

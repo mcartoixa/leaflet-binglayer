@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome",
+      "url": "http://localhost:8000",
+      "userDataDir": "${workspaceFolder}/.tmp/chrome",
+      "webRoot": "${workspaceFolder}/tmp/obj/bin",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "leaflet-binglayer.min.js": "${workspaceFolder}/src/index.js"
+      },
+      "runtimeArgs": [
+        "--auto-open-devtools-for-tabs",
+        "--error-console"
+      ]
+    }
+  ]
+}

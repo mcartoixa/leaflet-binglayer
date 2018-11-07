@@ -1,7 +1,8 @@
 .vscode/
-bin/
+build/
 test/
 
-*.yml
 *.bat
+*.sh
+*.yml
 gulpfile.js

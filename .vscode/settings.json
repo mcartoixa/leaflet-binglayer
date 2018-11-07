@@ -1,24 +1,51 @@
 {
-    "editor.tabSize": 4,
-    "editor.insertSpaces": true,
     "editor.trimAutoWhitespace": true,
+    "eslint.enable": true,
+    "eslint.validate": [
+      "javascript",
+    ],
     "files.exclude": {
         "**/.git": true,
-        "**/*.log": true,
-        "**/node_modules/": true,
         ".sonar/": true,
         ".sonarlint/": true,
         ".tmp/": true,
-        "tmp/": true
+        ".vs/": true,
+        "node_modules/": true
+    },
+    "files.watcherExclude": {
+      "**/.git/objects/**": true,
+      "**/.git/subtree-cache/**": true,
+      "**/.sonarlint/*/**": true,
+      "**/.tmp/*/**": true,
+      "**/.vs/*/**": true,
+      "**/node_modules/*/**": true,
+      "**/tmp/obj/**": true
     },
     "javascript.format.enable": true,
     "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
     "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
     "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
     "javascript.format.insertSpaceAfterSemicolonInForStatements": true,
-    "javascript.format.insertSpaceBeforeFunctionParenthesis": false,
+    "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+    "terminal.integrated.shell.linux": "bash",
+    "terminal.integrated.shell.osx": "bash",
+    "terminal.integrated.shell.windows": "cmd.exe",
+    "terminal.integrated.shellArgs.linux": [
+        "--rcfile",
+        "build/.bashrc",
+        "-i"
+    ],
+    "terminal.integrated.shellArgs.osx": [
+        "--rcfile",
+        "bin/.bashrc",
+        "-i",
+        "-c",
+        "/bin/zsh",
+        "-l"
+    ],
     "terminal.integrated.shellArgs.windows": [
+        "/V:ON",
         "/K",
-        "bin\\SetEnv.bat"
+        "build\\SetEnv.bat"
     ]
 }

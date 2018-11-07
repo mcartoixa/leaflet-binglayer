@@ -8,13 +8,24 @@
   "dependencies": {},
   "devDependencies": {
     "browser-env-vars": "~1.1.1",
-    "budo": "~11.2.0",
+    "cross-env": "~5.2.0",
     "del": "~3.0.0",
-    "eslint": "~4.19.1",
+    "eslint": "~5.8.0",
+    "eslint-config-standard": "~12.0.0",
+    "eslint-loader": "~2.1.1",
+    "eslint-plugin-import": "~2.14.0",
+    "eslint-plugin-node": "~8.0.0",
+    "eslint-plugin-promise": "~4.0.1",
+    "eslint-plugin-standard": "~4.0.0",
     "gulp": "~3.9.1",
-    "gulp-eslint": "~4.0.2",
-    "run-sequence": "~2.2.1",
-    "webpack-stream": "~4.0.3"
+    "gulp-connect": "~5.6.1",
+    "gulp-eslint": "~5.0.0",
+    "gulp-load-plugins": "~1.5.0",
+    "gulp-uglify": "~3.0.1",
+    "gulp-rename": "~1.4.0",
+    "gulp-sourcemaps": "~2.6.4",
+    "readable-stream": "~3.0.6",
+    "run-sequence": "~2.2.1"
   },
   "peerDependencies": {
     "leaflet": ">=1.0.0"
@@ -23,11 +34,12 @@
     "lib": "./src"
   },
   "scripts": {
-    "debug": "gulp debug",
+    "analysis": "gulp analysis",
     "clean": "gulp clean",
     "compile": "gulp compile",
+    "debug": "cross-env NODE_ENV=development gulp debug",
     "package": "gulp package",
-    "build": "gulp compile",
+    "build": "gulp build",
     "rebuild": "gulp rebuild",
     "release": "gulp release"
   }
