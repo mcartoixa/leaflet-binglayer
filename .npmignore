@@ -1,7 +1,10 @@
+.tmp/
 .vscode/
 build/
 test/
+tmp/
 
+.editorconfig
 *.bat
 *.sh
 *.yml
