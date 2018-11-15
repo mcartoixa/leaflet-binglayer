@@ -9,7 +9,7 @@ cache:
 env:
   global:
     - _CLOC_VERSION=1.80
-    - PACKAGE_VERSION=1.0.1-$TRAVIS_BUILD_NUMBER
+    - PACKAGE_VERSION=1.0.0-$TRAVIS_BUILD_NUMBER
 
 install:
   - if [ ! -d .tmp ]; then mkdir .tmp; fi

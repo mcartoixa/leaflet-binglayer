@@ -1,10 +1,13 @@
 {
-  "name": "leaflet-binglayer",
+  "name": "@mcartoixa/leaflet-binglayer",
   "version": "1.0.0",
   "description": "Bing Maps Layer for Leaflet",
   "license": "MIT",
   "repository": "github:mcartoixa/leaflet-binglayer",
-  "main": "src/index.js",
+  "browser": "src/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {},
   "devDependencies": {
     "browser-env-vars": "~1.1.1",
